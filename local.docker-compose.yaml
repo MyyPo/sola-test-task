@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  sola-server:
+    container_name: "sola-server"
+    build:
+      context: .
+      dockerfile: local.Dockerfile
+    restart: unless-stopped
+    ports:
+      - "12499:12499"
+  sola-database:
+    container_name: "sola-database"
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_HOST=sola-database
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres-sola
+      - POSTGRES_DB=sola
+      - POSTGRES_MODE=disable
+    ports:
+      - "5432:5432"
+    volumes:
+      - sola-data:/var/lib/postgresql/data
+
+volumes:
+  sola-data:
